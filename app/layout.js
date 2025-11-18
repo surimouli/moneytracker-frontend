@@ -8,6 +8,11 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+// Correct way to read keys for both browser + server (Vercel)
+const publishableKey =
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+  process.env.CLERK_PUBLISHABLE_KEY;
+
 export const metadata = {
   title: "MoneyTracker",
   description: "Track your money with ease",
@@ -15,17 +20,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={publishableKey}>
       <html lang="en">
         <body
           style={{
             margin: 0,
-            backgroundColor: "#1B1311", // deep dark brown
+            backgroundColor: "#1B1311", // dark aesthetic brown
             color: "#FFEDEE", // soft light pinkish
             fontFamily:
               "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           }}
         >
+          {/* Header */}
           <header
             style={{
               display: "flex",
@@ -60,11 +66,11 @@ export default function RootLayout({ children }) {
                   Sign In
                 </button>
               </SignInButton>
+
               <SignUpButton>
                 <button
                   style={{
-                    background:
-                      "linear-gradient(135deg, #FF8FAB, #FFB3C6)",
+                    background: "linear-gradient(135deg, #FF8FAB, #FFB3C6)",
                     color: "#3B2520",
                     borderRadius: "999px",
                     fontWeight: 600,
@@ -79,6 +85,7 @@ export default function RootLayout({ children }) {
                 </button>
               </SignUpButton>
             </SignedOut>
+
             <SignedIn>
               <UserButton
                 appearance={{
@@ -93,6 +100,7 @@ export default function RootLayout({ children }) {
             </SignedIn>
           </header>
 
+          {/* Page content */}
           <main
             style={{
               maxWidth: "900px",
