@@ -3,9 +3,7 @@ import { clerkMiddleware } from '@clerk/nextjs/server';
 
 export default clerkMiddleware();
 
+// Apply Clerk to everything except static files and Next internals
 export const config = {
-  // Apply Clerk to everything except static files and Next internals
-  matcher: [
-    '/((?!_next|.*\\..*).*)',
-  ],
+  matcher: ['/((?!_next|.*\\..*).*)'],
 };
