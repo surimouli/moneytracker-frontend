@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.35.2",
+    "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
     "next": "16.0.3",
     "pg": "^8.16.3",
