@@ -1,6 +1,10 @@
+// app/api/transactions/route.js
+
+export const runtime = 'nodejs'; // make sure this runs on the Node runtime
+
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../../../lib/prisma';
 
 // GET /api/transactions  -> list current user's transactions
 export async function GET() {
@@ -16,10 +20,13 @@ export async function GET() {
       orderBy: { date: 'desc' },
     });
 
-    return NextResponse.json(transactions);
+    return NextResponse.json(transactions, { status: 200 });
   } catch (err) {
     console.error('GET /api/transactions error:', err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -56,6 +63,9 @@ export async function POST(request) {
     return NextResponse.json(created, { status: 201 });
   } catch (err) {
     console.error('POST /api/transactions error:', err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
