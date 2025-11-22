@@ -2,19 +2,22 @@
 
 export const runtime = 'nodejs';
 
-import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
 
-// GET /api/transactions
-export async function GET() {
+// GET /api/transactions?userId=...
+export async function GET(request) {
   try {
-    const { userId, sessionId } = auth();
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
 
-    console.log('AUTH RESULT IN GET /api/transactions:', { userId, sessionId });
+    console.log('GET /api/transactions userId:', userId);
 
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Missing userId' },
+        { status: 401 }
+      );
     }
 
     const transactions = await prisma.transaction.findMany({
@@ -35,16 +38,17 @@ export async function GET() {
 // POST /api/transactions
 export async function POST(request) {
   try {
-    const { userId, sessionId } = auth();
+    const body = await request.json();
+    const { userId, amount, type, category, description, date } = body;
 
-    console.log('AUTH RESULT IN POST /api/transactions:', { userId, sessionId });
+    console.log('POST /api/transactions userId:', userId);
 
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { error: 'Missing userId' },
+        { status: 401 }
+      );
     }
-
-    const body = await request.json();
-    const { amount, type, category, description, date } = body;
 
     if (!amount || !type || !category) {
       return NextResponse.json(
