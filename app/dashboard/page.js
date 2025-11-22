@@ -4,6 +4,9 @@ import './dashboard.css';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
+
 function formatCurrency(value) {
   if (isNaN(value)) return '$0.00';
   return `$${value.toFixed(2)}`;
@@ -40,7 +43,7 @@ export default function DashboardPage() {
     return today.toISOString().slice(0, 10);
   });
 
-  // Fetch transactions
+  // Fetch transactions (from Python backend)
   useEffect(() => {
     if (!isSignedIn || !userId) {
       setLoadingTx(false);
@@ -54,7 +57,7 @@ export default function DashboardPage() {
         setTxError(null);
 
         const res = await fetch(
-          `/api/transactions?userId=${encodeURIComponent(userId)}`
+          `${API_BASE}/transactions?userId=${encodeURIComponent(userId)}`
         );
 
         if (!res.ok) {
@@ -78,7 +81,7 @@ export default function DashboardPage() {
     fetchTransactions();
   }, [isSignedIn, userId]);
 
-  // Fetch categories
+  // Fetch categories (from Python backend)
   useEffect(() => {
     if (!isSignedIn || !userId) {
       setLoadingCats(false);
@@ -92,7 +95,7 @@ export default function DashboardPage() {
         setCatError(null);
 
         const res = await fetch(
-          `/api/categories?userId=${encodeURIComponent(userId)}`
+          `${API_BASE}/categories?userId=${encodeURIComponent(userId)}`
         );
 
         if (!res.ok) {
@@ -148,7 +151,7 @@ export default function DashboardPage() {
     try {
       setTxError(null);
 
-      const res = await fetch('/api/transactions', {
+      const res = await fetch(`${API_BASE}/transactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -165,7 +168,7 @@ export default function DashboardPage() {
 
       if (!res.ok) {
         console.error('Failed to create transaction:', data);
-        setTxError(data.error || 'Failed to create transaction');
+        setTxError(data.detail || data.error || 'Failed to create transaction');
         return;
       }
 
@@ -195,7 +198,7 @@ export default function DashboardPage() {
     try {
       setCatError(null);
 
-      const res = await fetch('/api/categories', {
+      const res = await fetch(`${API_BASE}/categories`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -208,7 +211,7 @@ export default function DashboardPage() {
 
       if (!res.ok) {
         console.error('Failed to create category:', data);
-        setCatError(data.error || 'Failed to create category');
+        setCatError(data.detail || data.error || 'Failed to create category');
         return;
       }
 
@@ -224,7 +227,7 @@ export default function DashboardPage() {
     if (!isSignedIn || !userId) return;
 
     try {
-      const res = await fetch('/api/categories', {
+      const res = await fetch(`${API_BASE}/categories`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, id }),
@@ -234,7 +237,7 @@ export default function DashboardPage() {
 
       if (!res.ok) {
         console.error('Failed to delete category:', data);
-        setCatError(data.error || 'Failed to delete category');
+        setCatError(data.detail || data.error || 'Failed to delete category');
         return;
       }
 
