@@ -12,38 +12,49 @@
   <body class="bg-light">
     <nav class="navbar navbar-dark bg-dark mb-4">
       <div class="container d-flex justify-content-between">
-        <a class="navbar-brand" href="{{ url_for('index') }}">
+        <a
+          class="navbar-brand"
+          href="{{ url_for('transactions.transactions_view') }}"
+        >
           💰 Budget Tracker
         </a>
 
         <div class="d-flex align-items-center gap-2">
           {% if current_user %}
           <span class="text-light small">Logged in as {{ current_user }}</span>
+
           <a
             class="btn btn-outline-light btn-sm"
-            href="{{ url_for('index') }}"
+            href="{{ url_for('transactions.transactions_view') }}"
           >
-            Dashboard
+            Transactions
           </a>
           <a
             class="btn btn-outline-light btn-sm"
-            href="{{ url_for('all_transactions') }}"
+            href="{{ url_for('categories.categories_view') }}"
           >
-            All Transactions
+            Categories
           </a>
+          <a
+            class="btn btn-outline-light btn-sm"
+            href="{{ url_for('history.history_view') }}"
+          >
+            History
+          </a>
+
           <a
             class="btn btn-warning btn-sm ms-2"
-            href="{{ url_for('logout') }}"
+            href="{{ url_for('auth.logout') }}"
           >
             Logout
           </a>
           {% else %}
-          <a class="btn btn-outline-light btn-sm" href="{{ url_for('login') }}">
+          <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.login') }}">
             Login
           </a>
           <a
             class="btn btn-outline-light btn-sm"
-            href="{{ url_for('register') }}"
+            href="{{ url_for('auth.register') }}"
           >
             Sign Up
           </a>
