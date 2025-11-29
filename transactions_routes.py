@@ -48,25 +48,14 @@ def transactions_view():
         flash("Transaction added!", "success")
         return redirect(url_for("transactions.transactions_view"))
 
-    # GET: show form + recent transactions
+    # GET: just show form + categories (no recent list here anymore)
     categories = (
         Category.query.filter_by(user_id=user_id)
         .order_by(Category.name)
         .all()
     )
 
-    recent = (
-        Transaction.query.filter_by(user_id=user_id)
-        .order_by(Transaction.date.desc())
-        .limit(5)
-        .all()
-    )
-
-    total = sum(t.amount for t in recent)
-
     return render_template(
         "transactions.html",
         categories=categories,
-        recent=recent,
-        total=total,
     )

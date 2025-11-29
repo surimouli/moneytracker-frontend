@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row">
-  <div class="col-md-5">
+<div class="row justify-content-center">
+  <div class="col-md-6">
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <h5 class="card-title">Add Transaction</h5>
@@ -85,56 +85,6 @@
             Save Transaction
           </button>
         </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-7">
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Recent Transactions</h5>
-        {% if recent %}
-        <p class="text-muted">
-          Showing the 5 most recent. For full history, use the
-          <strong>History</strong> tab.
-        </p>
-        <p class="mb-3">
-          Total of these 5:
-          <strong
-            class="{% if total < 0 %}text-danger{% else %}text-success{% endif %}"
-          >
-            ${{ "%.2f"|format(total) }}
-          </strong>
-        </p>
-        <div class="table-responsive">
-          <table class="table table-sm align-middle">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Note</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for t in recent %}
-              <tr>
-                <td>{{ t.date.strftime("%Y-%m-%d %H:%M") }}</td>
-                <td>{{ t.category }}</td>
-                <td
-                  class="{% if t.amount < 0 %}text-danger{% else %}text-success{% endif %}"
-                >
-                  ${{ "%.2f"|format(t.amount) }}
-                </td>
-                <td>{{ t.note }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <p class="text-muted mb-0">No transactions yet.</p>
-        {% endif %}
       </div>
     </div>
   </div>
